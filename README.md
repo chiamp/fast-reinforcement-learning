@@ -349,7 +349,7 @@ The other issue is that if the environment is continuous, the space complexity f
 		*  i.e. <img src="https://render.githubusercontent.com/render/math?math=\max_{a \in \mathscr{A}} \max_{\pi \in \Pi} u( \psi^\pi(s,a) ) = \max_{a \in \mathscr{A}} u( \psi^{\pi^'}(s,a) )">
 	* this mechanism may work under the assumption that successor feature functions that are used more often by the generalized policy are more relevant and useful
 
-Adding reward functions to approximate non-linear reward dynamics and adding successor feature function learning to the new task learning algorithm will give the agent the power to theoretically learn an optimal policy for any task. Adding a pruning mechanism to discard unneeded successor feature functions will give the agent the power to operate in  in a non-stationary, continuous environment, where the reward dynamics may change over time. I'm excited to see what other things we can do to improve the algorithm, as the more general we can make it, the more applicable it can be to the real world! 
+Adding reward functions to approximate non-linear reward dynamics and adding successor feature function learning to the new task learning algorithm will give the agent the power to theoretically learn an optimal policy for any task. Adding a pruning mechanism to discard unneeded successor feature functions will give the agent the power to operate in a non-stationary, continuous environment, where the reward dynamics may change over time. I'm excited to see what other things we can do to improve the algorithm, as the more general we can make it, the more applicable it can be to the real world! 
 
 ---
 <img src="https://render.githubusercontent.com/render/math?math=
