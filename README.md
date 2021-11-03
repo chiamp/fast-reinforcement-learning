@@ -1,4 +1,5 @@
 
+  
 
 # Fast Reinforcement Learning
 This is a repo where I implement the algorithms in the paper, [Fast reinforcement learning with generalized policy updates](https://www.pnas.org/content/pnas/117/48/30079.full.pdf). Thanks to Shaobo Hou and Andre Barreto for helping me out and answering some questions I had about the paper!
@@ -191,7 +192,7 @@ The algorithm is as follows:
 * Update the action-value function according to this update rule:
 	* <img src="https://render.githubusercontent.com/render/math?math=\delta \leftarrow r %2B \gamma q(s^',a^')-q(s,a)">
 	* <img src="https://render.githubusercontent.com/render/math?math=\theta \leftarrow \theta %2B \alpha\delta\nabla\theta q(s,a)">
-	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b  q(s^',b)">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\delta"> are the parameters of the action-value function <img src="https://render.githubusercontent.com/render/math?math=q">
+	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action-value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b  q(s^',b)">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\delta"> are the parameters of the action-value function <img src="https://render.githubusercontent.com/render/math?math=q">
 
 * Periodically measure the agent's performance by averaging over 100 episodes the total reward it receives when greedily following its policy derived from the current learned action-value function <img src="https://render.githubusercontent.com/render/math?math=q">
 
@@ -202,10 +203,10 @@ The algorithm to learn the successor feature functions is as follows:
 * For every training episode, randomly pick one of the task vectors to train on
 * For every time step in the episode, take the optimal action according to the corresponding successor feature function or uniformly randomly sample an action according to an exploration parameter <img src="https://render.githubusercontent.com/render/math?math=\epsilon">
 * Apply the selected action <img src="https://render.githubusercontent.com/render/math?math=a"> to the current state <img src="https://render.githubusercontent.com/render/math?math=s"> and observe the new resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'">
-* Update the successor feature model according to this update rule:
+* Update the successor feature function according to this update rule:
 	* <img src="https://render.githubusercontent.com/render/math?math=\delta \leftarrow \phi_h(s,a,s^') %2B \gamma\psi(s^',a^')-\psi(s,a)">
 	* <img src="https://render.githubusercontent.com/render/math?math=\theta \leftarrow \theta %2B \alpha\delta\nabla\theta\psi(s,a)">
-	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b \psi(s^',b)^{\top}\w">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\delta"> are the parameters of the successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi">
+	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action-value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b \psi(s^',b)^{\top}\w">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\theta"> are the parameters of the successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi">
 
 Note that the update rule is very similar to the update rule in regular Q-learning. Normally in regular Q-learning, the TD-error <img src="https://render.githubusercontent.com/render/math?math=\delta"> is equal to the difference between the bootstrapped action-value target <img src="https://render.githubusercontent.com/render/math?math=r {%2B}\gamma q(s^',a^')"> and the predicted action-value <img src="https://render.githubusercontent.com/render/math?math=q(s,a)">.
 
@@ -220,8 +221,6 @@ The algorithm for learning the new task vector and testing the agent's performan
 * Update the task vector <img src="https://render.githubusercontent.com/render/math?math=\w"> according to this update rule:
 	* <img src="https://render.githubusercontent.com/render/math?math=\min_\w[\phi_h(s,a,s^')^{\top}\w-r]^2">
 * Periodically measure the agent's performance by averaging over 100 episodes the total reward it receives when greedily following its generalized policy <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s%3B\w)">, given the current values of the learned task vector <img src="https://render.githubusercontent.com/render/math?math=\w">
-
-The task vector used for evaluation was <img src="https://render.githubusercontent.com/render/math?math=[1,-1]">.
 
 ### Learned Transition Feature Function
 When not given a hand-coded transition feature function, we can still use the fast reinforcement learning framework. However, we must first train the agent to learn a transition feature function <img src="https://render.githubusercontent.com/render/math?math=\phi_l(s,a,s^')"> from the environment rewards based on a variety of task vectors <img src="https://render.githubusercontent.com/render/math?math=[1,0]">, <img src="https://render.githubusercontent.com/render/math?math=[0,1]">, <img src="https://render.githubusercontent.com/render/math?math=[-1,1]">, and <img src="https://render.githubusercontent.com/render/math?math=[1,1]">. We can then have the agent used the learned transition feature function to learn two successor feature functions for the two task vectors <img src="https://render.githubusercontent.com/render/math?math=[1,0]"> and <img src="https://render.githubusercontent.com/render/math?math=[0,1]">, using a modified version of Q-learning. We can then test the agent's performance on a new task it hasn't seen before, using its generalized policy, leveraged from the learned successor feature functions.
@@ -241,6 +240,8 @@ Note that the transition feature function <img src="https://render.githubusercon
 Nevertheless, this potential discrepancy is inconsequential as it turns out that unit task vectors serve as a good enough basis to learn successor feature functions, regardless of what the task actually represents.
 
 ## Results
+The agent was evaluated on a new task where a reward of +1 is given if the agent picks up a red square and a reward of -1 is given if it picks up a blue triangle, and 0 otherwise. This task corresponds to a task vector <img src="https://render.githubusercontent.com/render/math?math=\w=[1,-1]">.
+
 The total sum of rewards received by the agent averaged over 100 episodes is shown in the graph below:
 
 ![Alt text](assets/linear_experiments_graph.png)
@@ -276,12 +277,13 @@ The algorithm to learn the transition feature function would then be as follows:
 	* <img src="https://render.githubusercontent.com/render/math?math=\min_{\phi_l} \sum_{j=1}^k \min_{u_j} [u_j(\phi_l(s,a,s^')) - r_j]^2">
 	* where <img src="https://render.githubusercontent.com/render/math?math=r_j"> is the transition reward associated with task <img src="https://render.githubusercontent.com/render/math?math=j">
 
----
 Four non-linear tasks were used to learn the transition feature function. The tasks are as follows:
-* +1 reward is given to the agent picks up an object where there's an even amount
----
+* +1 reward is given to the agent if it picks up a red square and -1 reward is given if it picks up a blue triangle, 0 otherwise, if the count for each object type is even (and vice versa when the count is odd)
+* +1 reward is given to the agent if it picks up a red square and -1 reward is given if it picks up a blue triangle, 0 otherwise, if the count for each object type is odd (and vice versa when the count is even)
+* +1 reward is given to the agent if it picks up an object that is vertically aligned with another object in the grid world and +0.1 reward is given instead if there are no objects vertically aligned with the picked up object, 0 otherwise
+* +1 reward is given to the agent if it picks up an object that is horizontally aligned with another object in the grid world and +0.1 reward is given instead if there are no objects horizontally aligned with the picked up object, 0 otherwise
 
-Since both the transition feature function and the reward functions are approximated by neural networks, the parameters for all models can be trained jointly end-to-end via backpropagation. Intuitively, the transition feature function must learn to represent general enough transition features such that they can be useful as inputs for all of the reward functions <img src="https://render.githubusercontent.com/render/math?math=u_1,...,u_j"> in order to approximate the transition rewards derived from the non-linear tasks.
+Since both the transition feature function and the reward functions are approximated by neural networks, the parameters for all models can be trained jointly end-to-end via backpropagation, using the environment transition rewards as the targets. Intuitively, the transition feature function must learn to represent general enough transition features such that they can be useful as inputs for all of the reward functions <img src="https://render.githubusercontent.com/render/math?math=u_1,...,u_j"> in order to approximate the transition rewards derived from the non-linear tasks.
 
 Once the transition feature function <img src="https://render.githubusercontent.com/render/math?math=\phi_l"> is learned, the same algorithm mentioned previously for learning the successor feature functions can be used.
 
@@ -290,23 +292,64 @@ The algorithm for learning the reward function for the new task and testing the 
 * For every training episode, for every time step in the training episode, uniformly randomly sample an action
 * Apply the selected action <img src="https://render.githubusercontent.com/render/math?math=a"> to the current state <img src="https://render.githubusercontent.com/render/math?math=s"> and observe the new resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'"> and transition reward <img src="https://render.githubusercontent.com/render/math?math=r">
 * Update the reward function <img src="https://render.githubusercontent.com/render/math?math=u"> according to this update rule:
-	* <img src="https://render.githubusercontent.com/render/math?math=\min_u[u( \phi_h(s,a,s^') ) - r]^2">
+	* <img src="https://render.githubusercontent.com/render/math?math=\min_u[u( \phi_l(s,a,s^') ) - r]^2">
 * Periodically measure the agent's performance by averaging over 100 episodes the total reward it receives when greedily following its generalized policy <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s%3Bu)">, given the current parameters of the learned reward function <img src="https://render.githubusercontent.com/render/math?math=u">
 
-The non-linear task used for evaluation was giving the agent a reward of +1 if it picked up the more abundant object, a reward of -1 if it picked up the less abundant object, and 0 otherwise.
+For comparison, the previous experiment was conducted again on non-linear tasks. A transition feature function was learned by approximating the four non-linear tasks mentioned above using task vectors. The successor feature function was then learned from the learned transition feature function using unit basis task vectors, as before.
 
----
-
-The same experiment using task vectors and dot product was repeated except on the non-linear tasks mentioned above. The results can be seen in the graph below:
-
----
+The non-linear task used for evaluation is as follows:
+* give the agent a reward of +1 if it picked up the more abundant object,  and a reward of -1 if it picked up the less abundant object, and 0 otherwise.
 
 The total sum of rewards received by the agent averaged over 100 episodes using the learned reward function is shown in the graph below:
 
 ![Alt text](assets/nonlinear_experiments_graph.png)
 
+Fast reinforcement learning using non-linear reward functions is represented by the orange line, and fast reinforcement learning using task vectors is represented by the blue line.
+
+As you can see, the agent using the non-linear reward functions to approximate the transition rewards perform marginally better than the agent using task vectors. With some tweaking of the reward function's neural network hyperparameters and the choice and number of tasks used, there could be potential for this framework to perform even better.
+
+Using a function approximator like a neural network to model the reward function theoretically allows this framework to generalize to the reward dynamics of any task, linear or non-linear. It is definitely worth exploring some more!
+
 ## Future Work
-Using the generalized policy to bootstrap and learn a new successor feature function for a new task
+So far, the fast reinforcement learning framework allows the agent to use a generalized policy that draws from past experience, to make better actions than it would make if it started learning from scratch. 
+
+But as we've seen, Q-learning will eventually outperform the generalized policy as Q-learning theoretically converges to an optimal policy, whereas there's no such guarantee for the generalized policy.
+
+We've seen that the generalized policy's initial baseline performance is much better than Q-learning, where the agent is starting from scratch. Naturally, an extension of the algorithms put forth by the paper is to let the agent leverage the strong initial baseline performance of the generalized policy, while learning a new successor feature function for the current task at hand, using a modified version of Q-learning.
+
+The algorithm would be as follows:
+* Given a set of learned successor feature functions from previous tasks, <img src="https://render.githubusercontent.com/render/math?math=\Psi=\{\psi^\pi_1(s,a)\,...,\psi^\pi_n(s,a)\}">, add a new, randomly initialized successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{n %2B 1}"> to the set for the new task
+* Randomly initialize a reward function <img src="https://render.githubusercontent.com/render/math?math=u_{n %2B 1}"> that will learn the reward dynamics of the new task
+* For every training episode, for every time step in the episode, take the optimal action according to the generalized policy <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s %3B u_{n %2B 1})"> or uniformly randomly sample an action according to an exploration parameter <img src="https://render.githubusercontent.com/render/math?math=\epsilon">
+* Apply the selected action <img src="https://render.githubusercontent.com/render/math?math=a"> to the current state <img src="https://render.githubusercontent.com/render/math?math=s"> and observe the new resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'">
+* Update the successor feature function according to this update rule:
+	* <img src="https://render.githubusercontent.com/render/math?math=\delta \leftarrow \phi_l(s,a,s^') %2B \gamma\psi^\pi_{n%2B1}(s^',a^')-\psi^\pi_{n%2B1}(s,a)">
+	* <img src="https://render.githubusercontent.com/render/math?math=\theta \leftarrow \theta %2B \alpha\delta\nabla\theta\psi^\pi_{n%2B1}(s,a)">
+	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action-value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b u_{n%2B1}( \psi^\pi_{n%2B1}(s^',b) )">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\theta"> are the parameters of the successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{n%2B1}">
+* Update the reward function <img src="https://render.githubusercontent.com/render/math?math=u_{n%2B1}"> according to this update rule:
+	* <img src="https://render.githubusercontent.com/render/math?math=\min_{u_{n%2B1}}[u_{n%2B1}( \phi_l(s,a,s^') ) - r]^2">
+
+The same can algorithm can be applied to task vectors as well, in which we would just take the dot product of the transition features and task vector to get the predicted transition reward and action-values, instead of feeding it as inputs into the reward function.
+
+This algorithm essentially adds the successor feature learning algorithm to the new task learning algorithm used in earlier experiments. As mentioned before, the new task learning algorithm was able to have decent performance due to the strong initial baseline performance given by the generalized policy. But the performance plateaus because there is no successor feature function being learned for the new task (only the reward dynamics of the new task are learned, either via a task vector or reward function). Adding a separate successor feature function allows it to learn a policy specifically for the new task, using a modified version of Q-learning. Thus, using the modified algorithm allows the agent to leverage the strong initial baseline performance of the generalized policy for the initial episodes of training, while asymptotically learning an optimal policy for the new task. 
+
+We should expect to see a decent initial performance of the agent, similar to what we saw in previous experiments when it used its generalized policy. Over time, the successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{n%2B1}"> will have its parameters updated and its corresponding action-values <img src="https://render.githubusercontent.com/render/math?math=u( \psi^\pi_{n%2B1} )"> will increase as the agent learns from the new task. Once <img src="https://render.githubusercontent.com/render/math?math=u( \psi^\pi_{n%2B1}(s,a,s^') ) \ge u( \psi^\pi_{j}(s,a,s^') )"> for all <img src="https://render.githubusercontent.com/render/math?math=\{ j \in \mathbb{N} \mid 1 \le j \le n \}">, for all <img src="https://render.githubusercontent.com/render/math?math=s,a,s^' \in \mathscr{S} \times \mathscr{A} \times \mathscr{S}">, we should see the generalized policy improve beyond the plateau that we saw in previous experiments (although practically speaking, the generalized policy will improve incrementally even before this point, as <img src="https://render.githubusercontent.com/render/math?math=u( \psi^\pi_{n%2B1}(s,a,s^') ) \ge u( \psi^\pi_{j}(s,a,s^') )"> for an increasing amount of state-action-state triplets).
+
+Another benefit is that using the generalized policy could lead to potentially better action selection compared to following a randomly initialized policy. Perhaps this strong initial baseline may lead to faster convergence to an optimal policy as well.
+
+The only downside of this algorithm is that the agent must know that it is given a new task, so that it can instantiate a new corresponding successor feature function to learn the successor features and reward dynamics of the new task. This would be impossible if the agent were to use the current algorithm in hypothetical, non-stationary continuous environments, where the reward dynamics could change over time.
+
+A possible solution to this is to set a hyperparameter <img src="https://render.githubusercontent.com/render/math?math=\rho">, where every <img src="https://render.githubusercontent.com/render/math?math=\rho"> sample transitions, the agent instantiates a new successor feature function to learn (and stops learning for the previous successor feature function). This would help it adapt to new reward dynamics, although it wouldn't be ideal as the change in environment reward dynamics may not coincide simultaneously with the instantiation of a new successor feature function. Nevertheless, it'll give the agent some level of adaptability.
+
+The other issue is that if the environment is continuous, the space complexity for storing an ever-increasing amount of successor feature functions is intractably large. Therefore there may be a need to design a pruning mechanism to discard unneeded successor feature functions over time, to maintain a manageable amount of memory. Some possible pruning mechanisms could be:
+* maintain the <img src="https://render.githubusercontent.com/render/math?math=\eta">-most recent successor feature functions, and discard any that are older
+	* this mechanism may work under the assumption that the most recent reward dynamics encountered by the agent in the environment are more relevant and useful
+* keep a running count of how often each successor feature function, <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi \in \Psi">, is used in the generalized policy, and then over time discard the successor feature functions with the lowest count
+	* a successor feature function, <img src="https://render.githubusercontent.com/render/math?math=\psi^{\pi^'}(s,a)">, is considered "used" by the generalized policy if it's corresponding action-value is the maximum out of all policies <img src="https://render.githubusercontent.com/render/math?math=\Pi"> and all actions <img src="https://render.githubusercontent.com/render/math?math=\mathscr{A}"> for the current state <img src="https://render.githubusercontent.com/render/math?math=s">
+		*  i.e. <img src="https://render.githubusercontent.com/render/math?math=\max_{a \in \mathscr{A}} \max_{\pi \in \Pi} u( \psi^\pi(s,a) ) = \max_{a \in \mathscr{A}} u( \psi^{\pi^'}(s,a) )">
+	* this mechanism may work under the assumption that successor feature functions that are used more often by the generalized policy are more relevant and useful
+
+Adding reward functions to approximate non-linear reward dynamics and adding successor feature function learning to the new task learning algorithm will give the agent the power to theoretically learn an optimal policy for any task. Adding a pruning mechanism to discard unneeded successor feature functions will give the agent the power to operate in  in a non-stationary, continuous environment, where the reward dynamics may change over time. I'm excited to see what other things we can do to improve the algorithm, as the more general we can make it, the more applicable it can be to the real world! 
 
 ---
 <img src="https://render.githubusercontent.com/render/math?math=
