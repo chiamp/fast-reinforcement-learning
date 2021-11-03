@@ -60,7 +60,7 @@ Therefore, the concept of tasks splits the dynamics function <img src="https://r
 
 To give some intuition why this might be helpful, we can go back to the badminton analogy. In badminton, different court lines are used to determine the boundaries of the court, depending on whether you are playing a singles or doubles game:
 
-![Alt text](assets/badminton_boundaries.PNG)
+![Alt text](assets/badminton_boundaries.jpg)
 
 (image taken from the thumbnail of this [video](https://www.youtube.com/watch?v=KVr0Wzk1nAk))
 
@@ -147,7 +147,7 @@ Since the successor feature functions compute successor features rather than act
 
 Let's go back to the badminton analogy to gain some intuition on why the generalized policy may perform better than learning from scratch. Suppose we've trained an agent on both the singles and doubles format and have learned a corresponding successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{s}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{d}(s,a)"> for each. Let's define the successor feature functions to output a vector of size 13 that denote the number of times a birdie will land on the corresponding region of the opponent's side of the court (as displayed in the diagram below) if the agent follows the policy until the end of the game:
 
-![Alt text](assets/badminton_boundaries_custom.PNG)
+![Alt text](assets/badminton_boundaries_custom.jpg)
 
 Therefore if the agent learned the game formats properly, we should expect <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{s}(s,a)"> to output lower counts for regions 1, 3, 4, 7, 8 and 11, compared to <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{d}(s,a)">, as those regions are considered "out" in the singles format. We should also expect to see lower counts in regions 12 and 13 for both successor feature functions since those regions are considered "out" for both formats.
 
@@ -251,9 +251,9 @@ As you can see, the fast reinforcement learning algorithms immediately perform m
 
 For comparison, here are the graphs for the same experiments found as Figure 5 A and B on page 6 of the paper:
 
-![Alt text](assets/linear_experiments_paper_graph_A.PNG)
+![Alt text](assets/linear_experiments_paper_graph_A.png)
 
-![Alt text](assets/linear_experiments_paper_graph_B.PNG)
+![Alt text](assets/linear_experiments_paper_graph_B.png)
 
 ## Expanding the Research Paper for Non-Linear Tasks
 The paper describes a method to learn non-linear tasks by using a mapping, <img src="https://render.githubusercontent.com/render/math?math=w:\mathscr{S} \rightarrow \mathscr{W}">, that maps states to task vectors. The generalized policy is redefined as <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s %3Bw(s) )">, and Q-learning is used to learn <img src="https://render.githubusercontent.com/render/math?math=w">. 
