@@ -1,13 +1,18 @@
 
 
 # Fast Reinforcement Learning
-This is a repo where I implement the algorithms in the paper, [Fast reinforcement with generalized policy updates](https://www.pnas.org/content/pnas/117/48/30079.full.pdf). Thanks to Shaobo Hou and Andre Barreto for helping me out and answering some questions I had about the paper!
+This is a repo where I implement the algorithms in the paper, [Fast reinforcement learning with generalized policy updates](https://www.pnas.org/content/pnas/117/48/30079.full.pdf). Thanks to Shaobo Hou and Andre Barreto for helping me out and answering some questions I had about the paper!
 
 ## Table of Contents
 * [Background](#background)
 * [Approach](#approach)
 * [Reinforcement Learning Framework](#reinforcement-learning-framework)
 * [Environment](#environment)
+* [Fast Reinforcement Learning Framework](#fast-reinforcement-learning-framework)
+* [Algorithms and Experiments](#algorithms-and-experiments)
+* [Results](#results)
+* [Expanding the Research Paper for Non-Linear Tasks](#expanding-the-research-paper-for-non-linear-tasks)
+* [Future Work](#future-work)
 * [File Descriptions](#file-descriptions)
 * [Additional Resources](#additional-resources)
 
