@@ -52,7 +52,7 @@ Thus, the dynamics function determines the "dynamics" of the environment; essent
 ### Tasks
 In the traditional reinforcement learning framework described above, the agent's goal is to maximize the reward it receives. The reward is defined by the dynamics of the environment, and thus you could say that the reward dynamics determines the task the agent must optimize for.
 
-For example, playing a zero-sum board game would have reward dynamics structured such that winning the game would result in receiving a positive reward, while losing the game would result in receiving a negative reward. Therefore given the dynamics of this environment, training an agent to maximize the reward received would essentially train the agent to optimize for the task of developing a strategy that allows it win as much as possible on this board game.
+For example, playing a zero-sum board game would have reward dynamics structured such that winning the game would result in receiving a positive reward, while losing the game would result in receiving a negative reward. Therefore given the reward dynamics of this environment, training an agent to maximize the reward received would essentially train the agent to optimize for the task of developing a strategy that allows it win as much as possible on this board game.
 
 As mentioned before, agents typically train from scratch for every new task at hand. But in this paper, the authors develop a framework where agents are able to utilize skills it developed from past tasks, in order to help learn optimal strategies for tackling new tasks faster.
 
