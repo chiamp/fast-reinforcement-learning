@@ -336,7 +336,7 @@ This algorithm essentially adds the successor feature learning algorithm to the 
 
 We should expect to see a decent initial performance of the agent, similar to what we saw in previous experiments when it used its generalized policy. Over time, the successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{n%2B1}"> will have its parameters updated and its corresponding action-values <img src="https://render.githubusercontent.com/render/math?math=u( \psi^\pi_{n%2B1} )"> will increase as the agent learns from the new task. Once <img src="https://render.githubusercontent.com/render/math?math=u( \psi^\pi_{n%2B1}(s,a,s^') ) \ge u( \psi^\pi_{j}(s,a,s^') )"> for all <img src="https://render.githubusercontent.com/render/math?math=\{ j \in \mathbb{N} \mid 1 \le j \le n \}">, for all <img src="https://render.githubusercontent.com/render/math?math=s,a,s^' \in \mathscr{S} \times \mathscr{A} \times \mathscr{S}">, we should see the generalized policy improve beyond the plateau that we saw in previous experiments (although practically speaking, the generalized policy will improve incrementally even before this point, as <img src="https://render.githubusercontent.com/render/math?math=u( \psi^\pi_{n%2B1}(s,a,s^') ) \ge u( \psi^\pi_{j}(s,a,s^') )"> for an increasing amount of state-action-state triplets).
 
-Another benefit is that using the generalized policy could lead to potentially better action selection compared to following a randomly initialized policy, for the initial episodes. Perhaps this strong initial baseline may lead to faster convergence to an optimal policy as well.
+Another benefit is that using the generalized policy could lead to potentially better action selection compared to following a randomly initialized policy, for the initial episodes. Perhaps this strong initial baseline performance may lead to more sample efficient learning and therefore faster convergence to an optimal policy as well.
 
 The only downside of this algorithm is that the agent must know that it is given a new task, so that it can instantiate a new corresponding successor feature function to learn the successor features and reward dynamics of the new task. This would be impossible if the agent were to use the current algorithm in hypothetical, non-stationary continuous environments, where the reward dynamics could change over time.
 
@@ -350,7 +350,7 @@ The other issue is that if the environment is continuous, the space complexity f
 		*  i.e. <img src="https://render.githubusercontent.com/render/math?math=\max_{a \in \mathscr{A}} \max_{\pi \in \Pi} u( \psi^\pi(s,a) ) = \max_{a \in \mathscr{A}} u( \psi^{\pi^'}(s,a) )">
 	* this mechanism may work under the assumption that successor feature functions that are used more often by the generalized policy are more relevant and useful
 
-Adding reward functions to approximate non-linear reward dynamics and adding successor feature function learning to the new task learning algorithm will give the agent the power to theoretically learn an optimal policy for any task. Adding a pruning mechanism to discard unneeded successor feature functions will give the agent the power to operate in a non-stationary, continuous environment, where the reward dynamics may change over time. I'm excited to see what other things we can do to improve the algorithm, as the more general we can make it, the more applicable it can be to the real world! 
+Adding reward functions to approximate non-linear reward dynamics and adding successor feature function learning to the new task learning algorithm will give the agent the power to theoretically learn an optimal policy for any task. Adding a pruning mechanism to discard unneeded successor feature functions will give the agent the power to operate in a non-stationary, continuous environment, where the reward dynamics may change over time. The result is a sample efficient algorithm that can allow the agent to learn a variety of tasks in a variety of environments. I'm excited to see what other things we can do to improve the algorithm, as the more general we can make it, the more applicable it can be to the real world! 
 
 ## File Descriptions
 * `q_learning.py` holds the training algorithm for Q-learning
@@ -385,5 +385,5 @@ Adding reward functions to approximate non-linear reward dynamics and adding suc
 For this project, I'm using Python 3.7.11.
 
 ## Additional Resources
-* [DeepMind Fast Reinforcement Learning webpage](https://deepmind.com/blog/article/fast-reinforcement-learning-through-the-composition-of-behaviours)
+* [DeepMind fast reinforcement learning webpage](https://deepmind.com/blog/article/fast-reinforcement-learning-through-the-composition-of-behaviours)
 * [A Youtube video of Doina Precup (one of the authors) explaining the paper](https://www.youtube.com/watch?v=6_7vE08acVM)
