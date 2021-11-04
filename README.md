@@ -1,4 +1,5 @@
 
+
   
 
 # Fast Reinforcement Learning
@@ -351,25 +352,37 @@ The other issue is that if the environment is continuous, the space complexity f
 
 Adding reward functions to approximate non-linear reward dynamics and adding successor feature function learning to the new task learning algorithm will give the agent the power to theoretically learn an optimal policy for any task. Adding a pruning mechanism to discard unneeded successor feature functions will give the agent the power to operate in a non-stationary, continuous environment, where the reward dynamics may change over time. I'm excited to see what other things we can do to improve the algorithm, as the more general we can make it, the more applicable it can be to the real world! 
 
----
-<img src="https://render.githubusercontent.com/render/math?math=
-
 ## File Descriptions
-* `classes.py` holds data structure classes used by MuZero
-* `main.py` holds functions for self-play, MCTS, training, testing and recording
-	* `self_play` is the main function to call; it initiates self-play and trains MuZero
-* `models/` holds saved neural network models used by MuZero
-* `replay_buffers/` holds replay buffer instances, saved during self-play
+* `q_learning.py` holds the training algorithm for Q-learning
+* `sf_q_learning.py`holds the training algorithm to learn successor feature functions using a hand-coded transition feature function
+* `task_learning.py` holds the training algorithm to learn a task vector on a new task, using the successor feature functions learned in `sf_q_learning.py`
+* `task_and_feature_learning.py` holds training algorithms to learn a transition feature function, learn successor feature functions using the learned transition feature function, and then learning a task vector on a new task, using the learned successor feature functions
+* `nonlinear_task_and_feature_learning_task_vector.py` holds the same training algorithms as `task_and_feature_learning.py`, except the agent trains on non-linear tasks instead of linear tasks
+* `nonlinear_task_and_feature_learning_reward_model.py` holds the same training algorithms as `nonlinear_task_and_feature_learning_task_vector.py`, except the agent approximates the transition rewards using a reward function neural network, instead of task vectors
+* `nonlinear_reward_functions.py` holds non-linear reward functions for the grid world environment
+* `classes.py` holds data structure classes for the grid world environment and all neural network models
+* `main.py` holds functions that run all of the training algorithms listed above
+	* `run_linear_experiments` will run the training algorithms in `q_learning.py`, `sf_q_learning.py`, `task_learning.py` and `task_and_feature_learning.py`, on linear tasks
+	* `run_nonlinear_experiments` will run the training algorithms in `nonlinear_task_and_feature_learning_task_vector.py` and `nonlinear_task_and_feature_learning_reward_model.py`, on non-linear tasks
+* `models/` holds saved neural network models learned by the agent
+	* `models/q_model.pkl` is the Q-learning function learned in `q_learning.py`
+	* `models/sf_list.pkl` is the list of successor feature functions learned in `sf_q_learning.py`
+	* `models/tf_model.pkl` is the transition feature function learned in `task_and_feature_learning.py`
+	* `models/sf_list_with_learned_transition_features_of_dimension_2.pkl` is the list of successor feature functions learned in `task_and_feature_learning.py`
+	* `models/nonlinear_tf_model_task_vector.pkl` is the transition feature function learned in `nonlinear_task_and_feature_learning_task_vector.pkl`
+	* `models/nonlinear_sf_list_with_learned_transition_features_of_dimension_2_task_vector.pkl` is the list of successor feature functions learned in `nonlinear_task_and_feature_learning_task_vector.pkl`
+	* `models/nonlinear_tf_model_reward_model.pkl` is the transition feature function learned in `nonlinear_task_and_feature_learning_reward_model.pkl`
+	* `models/nonlinear_sf_list_with_learned_transition_features_of_dimension_2_reward_model.pkl` is the list of successor feature functions learned in `nonlinear_task_and_feature_learning_reward_model.pkl`
+* `evaluation_data/` holds the evaluation data on the agent's performance on a new task over time as it trains
+	* `classic_q_learning.pkl` is the evaluation data of the agent in `q_learning.py`
+	* `task_learning.pkl` is the evaluation data of the agent in `task_learning.py`
+	* `task_learning_with_learned_transition_features_of_dimension_2.pkl` is the evaluation data of the agent in `task_and_feature_learning.py`
+	* `nonlinear_task_learning_with_learned_transition_features_of_dimension_2_task_vector.pkl` is the evaluation data of the agent in `nonlinear_task_and_feature_learning_task_vector.py`
+	* `nonlinear_task_learning_with_learned_transition_features_of_dimension_2_reward_model.pkl` is the evaluation data of the agent in `nonlinear_task_and_feature_learning_reward_model.py`
 * `assets/` holds media files used in this `README.md`
 * `requirements.txt` holds all required dependencies, which can be installed by typing `pip install -r requirements.txt` in the command line
 
-For this project, I'm using Python 3.7.4.
-
-For the lunar lander environment, the following commands must be executed in Anaconda:
-* `conda install swig`
-* `pip install box2d`
-
-See [here](https://stackoverflow.com/questions/54252800/python-cant-install-box2d-swig-exe-failed-with-error-code-1) for additional information.
+For this project, I'm using Python 3.7.11.
 
 ## Additional Resources
 * [DeepMind Fast Reinforcement Learning webpage](https://deepmind.com/blog/article/fast-reinforcement-learning-through-the-composition-of-behaviours)
