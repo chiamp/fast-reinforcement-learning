@@ -1,5 +1,6 @@
 
 
+
   
 
 # Fast Reinforcement Learning
@@ -369,7 +370,7 @@ Adding reward functions to approximate non-linear reward dynamics and adding suc
 
 ## File Descriptions
 * `q_learning.py` holds the training algorithm for Q-learning
-* `sf_q_learning.py`holds the training algorithm to learn successor feature functions using a hand-coded transition feature function
+* `sf_q_learning.py` holds the training algorithm to learn successor feature functions using a hand-coded transition feature function
 * `task_learning.py` holds the training algorithm to learn a task vector on a new task, using the successor feature functions learned in `sf_q_learning.py`
 * `task_and_feature_learning.py` holds training algorithms to learn a transition feature function, learn successor feature functions using the learned transition feature function, and then learning a task vector on a new task, using the learned successor feature functions
 * `nonlinear_task_and_feature_learning_task_vector.py` holds the same training algorithms as `task_and_feature_learning.py`, except the agent trains on non-linear tasks instead of linear tasks
