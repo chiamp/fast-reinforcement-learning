@@ -8,7 +8,7 @@ This is a repo where I implement the algorithms in the paper, [Fast reinforcemen
 ## Table of Contents
 * [Background](#background)
 * [Approach](#approach)
-* [Reinforcement Learning Framework](#reinforcement-learning-framework)
+* [Traditional Reinforcement Learning Framework](#traditional-reinforcement-learning-framework)
 * [Environment](#environment)
 * [Fast Reinforcement Learning Framework](#fast-reinforcement-learning-framework)
 * [Algorithms and Experiments](#algorithms-and-experiments)
@@ -32,7 +32,7 @@ In our early childhood years, we are faced with the task of developing motor con
 
 In contrast, AI algorithms in general don't have the capability of re-using skills learned from past tasks. Every new task, the AI agent starts with a fresh clean state and has to learn from scratch. In the case of developing a robot that could play badminton, that would mean that the AI agent would have to learn how to stand and walk before even learning how to play the sport itself. If we were to create an algorithm that could allow the AI agent to draw from past experiences and leverage the skills it learned from past related tasks, perhaps it'll help the AI agent be more sample efficient and learn faster, like humans.
 
-## Reinforcement Learning Framework
+## Traditional Reinforcement Learning Framework
 
 ### Introduction
 
@@ -83,6 +83,7 @@ Therefore given the transition dynamics are the same, we can create a general al
 The environment used in the paper is a 10 by 10 grid with 2 different types of objects (represented by the red squares and blue triangles) occupying a total of 10 cells at a given time. The agent (represented by the yellow circle) can move up, down, left or right, and will automatically pick up objects if it moves to a cell occupied by one. Once an object is picked up by the agent, another object of a random type is randomly generated in one of the unoccupied cells in the grid.
 
 ## Fast Reinforcement Learning Framework
+In the paper, the traditional reinforcement learning framework is modified and enhanced so that it can support more sample-efficient algorithms that allow the agent to re-use skills learned from past tasks on new tasks. This section will detail the changes made to the framework.
 
 ### Transition Feature Function
 In the paper, the transition feature function <img src="https://render.githubusercontent.com/render/math?math=\phi(s,a,s^')"> is introduced as a function that outputs a vector of transition features, based on arriving at a resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'">, after applying action <img src="https://render.githubusercontent.com/render/math?math=a"> to state <img src="https://render.githubusercontent.com/render/math?math=s">. These outputted transition features are a way of describing the transition dynamics for state-action sequences <img src="https://render.githubusercontent.com/render/math?math=s,a \rightarrow s^'">.
@@ -122,14 +123,14 @@ Indeed when you take the dot product of the successor feature function <img src=
 
 <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi(s,a)^\top\w = q^\pi_\w(s,a)">
 
-In the original reinforcement learning framework, we obtain the transition reward <img src="https://render.githubusercontent.com/render/math?math=r"> for arriving at the resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'"> after applying action <img src="https://render.githubusercontent.com/render/math?math=a"> to the current state <img src="https://render.githubusercontent.com/render/math?math=s">, from the dynamics function, <img src="https://render.githubusercontent.com/render/math?math=p(s^',r \mid s,a)">. The dynamics function encapsulates both the transition and reward dynamics of the environment, which is sufficient if there is only one task we'd like the agent to optimize for.
+In the traditional reinforcement learning framework, we obtain the transition reward <img src="https://render.githubusercontent.com/render/math?math=r"> for arriving at the resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'"> after applying action <img src="https://render.githubusercontent.com/render/math?math=a"> to the current state <img src="https://render.githubusercontent.com/render/math?math=s">, from the dynamics function, <img src="https://render.githubusercontent.com/render/math?math=p(s^',r \mid s,a)">. The dynamics function encapsulates both the transition and reward dynamics of the environment, which is sufficient if there is only one task we'd like the agent to optimize for.
 
 In the fast reinforcement learning framework (under the assumption that the reward dynamics can be **linearly approximated** by the transition features), we first calculate the transition features <img src="https://render.githubusercontent.com/render/math?math=\phi(s,a,s^')"> for arriving at the resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'"> after applying action <img src="https://render.githubusercontent.com/render/math?math=a"> to the current state <img src="https://render.githubusercontent.com/render/math?math=s">. Then we can separately dot product the transition features with a number of task vectors <img src="https://render.githubusercontent.com/render/math?math=\w_1,...\w_n"> to get the corresponding transition rewards for each task, <img src="https://render.githubusercontent.com/render/math?math=r_1(s,a,s^'),...,r_n(s,a,s^')">, from the same transition features.
 
 Therefore under the linear assumption, this new framework allows us to derive transition rewards from multiple tasks, from the same transition features, and therefore from the same state-action sequences <img src="https://render.githubusercontent.com/render/math?math=s,a \rightarrow s^'">. Later on, it will be evident why this property allows the agent to re-use the skills it learned from past tasks on new tasks.
 
 ### Generalized Policy
-Suppose we train an agent on a variety of different tasks with different reward dynamics, to produce a set of learned action-value functions for each task <img src="https://render.githubusercontent.com/render/math?math=Q=\{q^\pi_1(s,a),...,q^\pi_n(s,a)\}">. Now given a new task with different reward dynamics, the previously learned action-value functions in <img src="https://render.githubusercontent.com/render/math?math=Q"> would not be useful, as its predicted action-values are based on other tasks with different reward dynamics. That is to say, the original reinforcement learning framework doesn't allow us to leverage our knowledge of past tasks because the action-value function is only compatible with identical tasks with the same reward dynamics that that action-value function was trained on.
+Suppose we train an agent on a variety of different tasks with different reward dynamics, to produce a set of learned action-value functions for each task <img src="https://render.githubusercontent.com/render/math?math=Q=\{q^\pi_1(s,a),...,q^\pi_n(s,a)\}">. Now given a new task with different reward dynamics, the previously learned action-value functions in <img src="https://render.githubusercontent.com/render/math?math=Q"> would not be useful, as its predicted action-values are based on other tasks with different reward dynamics. That is to say, the traditional reinforcement learning framework doesn't allow us to leverage our knowledge of past tasks because the action-value function is only compatible with identical tasks with the same reward dynamics that that action-value function was trained on.
 
 Now suppose we train an agent on a variety of different tasks with different reward dynamics, to produce a set of learned successor feature functions for each task  <img src="https://render.githubusercontent.com/render/math?math=\Psi=\{\psi^\pi_1(s,a)\,...,\psi^\pi_n(s,a)\}">. Now given a new task vector <img src="https://render.githubusercontent.com/render/math?math=\w_{n%2B1}">with different reward dynamics, we can indeed use the previously learned successor feature functions and get the action-values for the new task, by taking the dot product between the two. This allows us to leverage our knowledge of past tasks to help guide the agent's decisions for a new task it hasn't seen before, in what is called the **generalized policy**.
 
@@ -169,7 +170,7 @@ In these cases, we would trivially expect that using the policy derived from <im
 
 <img src="https://render.githubusercontent.com/render/math?math=\w_{new}= [1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,-1]"> 
 
-Under the original reinforcement learning framework, we would have to retrain the agent to learn a new action-value function <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{new}(s,a)"> from scratch, because the new game format has different reward dynamics compared to the action-values predicted by <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{singles}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{doubles}(s,a)">. However under the fast reinforcement learning framework, the successor feature functions we learned for the singles and doubles format can be used by the generalized policy to determine the optimal action to take for the new task:
+Under the traditional reinforcement learning framework, we would have to retrain the agent to learn a new action-value function <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{new}(s,a)"> from scratch, because the new game format has different reward dynamics compared to the action-values predicted by <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{singles}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{doubles}(s,a)">. However under the fast reinforcement learning framework, the successor feature functions we learned for the singles and doubles format can be used by the generalized policy to determine the optimal action to take for the new task:
 
 <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s %3B \w_{new})=\argmax_{a \in \mathscr{A}} \max_{\pi \in \{s,d\}} q^\pi_{new}(s,a) = \argmax_{a \in \mathscr{A}} \max_{\pi \in \{s,d\}} \psi^\pi(s,a)^\top\w_{new}">
 
