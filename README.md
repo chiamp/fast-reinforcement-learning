@@ -83,7 +83,7 @@ Therefore given the transition dynamics are the same, we can create a general al
 The environment used in the paper is a 10 by 10 grid with 2 different types of objects (represented by the red squares and blue triangles) occupying a total of 10 cells at a given time. The agent (represented by the yellow circle) can move up, down, left or right, and will automatically pick up objects if it moves to a cell occupied by one. Once an object is picked up by the agent, another object of a random type is randomly generated in one of the unoccupied cells in the grid.
 
 ## Fast Reinforcement Learning Framework
-In the paper, the traditional reinforcement learning framework is modified and enhanced so that it can support more sample-efficient algorithms that allow the agent to re-use skills learned from past tasks on new tasks. This section will detail the changes added to the framework.
+In the paper, the traditional reinforcement learning framework is modified and enhanced so that it can support more sample-efficient algorithms that allow the agent to re-use skills learned from past tasks on new tasks. This section details the changes added to the framework.
 
 ### Transition Feature Function
 The transition feature function <img src="https://render.githubusercontent.com/render/math?math=\phi(s,a,s^')"> is introduced as a function that outputs a vector of transition features, based on arriving at a resulting state <img src="https://render.githubusercontent.com/render/math?math=s^'">, after applying action <img src="https://render.githubusercontent.com/render/math?math=a"> to state <img src="https://render.githubusercontent.com/render/math?math=s">. These outputted transition features are a way of describing the transition dynamics for state-action sequences <img src="https://render.githubusercontent.com/render/math?math=s,a \rightarrow s^'">.
@@ -140,7 +140,7 @@ More formally, the generalized policy is a function, <img src="https://render.gi
 
 (image taken from Fig. 3 of the [paper](https://www.pnas.org/content/pnas/117/48/30079.full.pdf))
 
-For every successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi">, for every action <img src="https://render.githubusercontent.com/render/math?math=a">, the successor features are computed, and then dot producted with the task vector <img src="https://render.githubusercontent.com/render/math?math=\w">. The maximum action-value for each action is taken across all successor feature functions, and then the action that maximizes these action-values is returned. The generalized policy can be summarized in this equation:
+For every successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi">, for every action <img src="https://render.githubusercontent.com/render/math?math=a">, the successor features are computed for the current state <img src="https://render.githubusercontent.com/render/math?math=s">, and then dot producted with the task vector <img src="https://render.githubusercontent.com/render/math?math=\w">. The maximum action-value for each action is taken across all successor feature functions, and then the action that maximizes these action-values is returned. The generalized policy can be summarized in this equation:
 
 <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s %3B \w)=\argmax_{a \in \mathscr{A}} \max_{\pi \in \Pi} q^\pi(s,a) = \argmax_{a \in \mathscr{A}} \max_{\pi \in \Pi} \psi^\pi(s,a)^\top\w">
 
@@ -148,7 +148,7 @@ Since the successor feature functions compute successor features rather than act
 
 ### Generalized Policy - Badminton
 
-Let's go back to the badminton analogy to gain some intuition on why the generalized policy may perform better than learning from scratch. Suppose we've trained an agent on both the singles and doubles format and have learned a corresponding successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{s}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{d}(s,a)"> for each. Let's define the successor feature functions to output a vector of size 13 that denote the number of times a birdie will land on the corresponding region of the opponent's side of the court (as displayed in the diagram below) if the agent follows the policy until the end of the game:
+Let's go back to the badminton analogy to gain some intuition on why the generalized policy may perform better than learning from scratch. Suppose we've trained an agent on both the singles and doubles format and have learned a corresponding successor feature function <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{s}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{d}(s,a)"> for each. Let's define the successor feature functions to output a vector of size 13 that denote the number of times a birdie will land on the corresponding region of the opponent's side of the court (as displayed in the diagram below) if the agent follows the policy <img src="https://render.githubusercontent.com/render/math?math=\pi"> until the end of the game:
 
 ![Alt text](assets/badminton_boundaries_custom.jpg)
 
@@ -166,24 +166,26 @@ When playing either format, the agent can use the generalized policy to help dec
 
 <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s %3B \w_{doubles})=\argmax_{a \in \mathscr{A}} \max_{\pi \in \{s,d\}} q^\pi_{doubles}(s,a) = \argmax_{a \in \mathscr{A}} \max_{\pi \in \{s,d\}} \psi^\pi(s,a)^\top\w_{doubles}">
 
-In these cases, we would trivially expect that using the policy derived from <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{s}(s,a)"> would outperform <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{d}(s,a)"> for the task vector <img src="https://render.githubusercontent.com/render/math?math=\w_{singles}">, and that the opposite would be true for the task vector <img src="https://render.githubusercontent.com/render/math?math=\w_{doubles}">. However the real power of this fast reinforcement learning framework, comes when the agent is given a task it hasn't seen before. Let's define a new game format as such:
+In these cases, we would trivially expect that the generalized policy would use the policy derived from <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{s}(s,a)"> more often than <img src="https://render.githubusercontent.com/render/math?math=\psi^\pi_{d}(s,a)"> for the task vector <img src="https://render.githubusercontent.com/render/math?math=\w_{singles}">, and that the opposite would be true for the task vector <img src="https://render.githubusercontent.com/render/math?math=\w_{doubles}">. However the real power of this fast reinforcement learning framework, comes when the agent is given a task it hasn't seen before. Let's define a new game format as such:
 
 <img src="https://render.githubusercontent.com/render/math?math=\w_{new}= [1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,-1]"> 
 
-Under the traditional reinforcement learning framework, we would have to retrain the agent to learn a new action-value function <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{new}(s,a)"> from scratch, because the new game format has different reward dynamics compared to the action-values predicted by <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{singles}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{doubles}(s,a)">. However under the fast reinforcement learning framework, the successor feature functions we learned for the singles and doubles format can be used by the generalized policy to determine the optimal action to take for the new task:
+Under the traditional reinforcement learning framework, we would have to retrain the agent to learn a new action-value function <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{new}(s,a)"> from scratch, because the new game format has different reward dynamics compared to the action-values predicted by learned action-value functions <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{singles}(s,a)"> and <img src="https://render.githubusercontent.com/render/math?math=q^\pi_{doubles}(s,a)">. However under the fast reinforcement learning framework, the successor feature functions the agent learned for the singles and doubles format can be re-used by the generalized policy to determine what actions to take for the new task:
 
 <img src="https://render.githubusercontent.com/render/math?math=\pi_\Psi(s %3B \w_{new})=\argmax_{a \in \mathscr{A}} \max_{\pi \in \{s,d\}} q^\pi_{new}(s,a) = \argmax_{a \in \mathscr{A}} \max_{\pi \in \{s,d\}} \psi^\pi(s,a)^\top\w_{new}">
+
+Assuming that the strategies the agent learned in the tasks <img src="https://render.githubusercontent.com/render/math?math=\w_{singles}"> and <img src="https://render.githubusercontent.com/render/math?math=\w_{doubles}"> have some relevance for the new task defined by <img src="https://render.githubusercontent.com/render/math?math=\w_{new}">, the actions selected by the generalized policy should allow the agent to have a better performance on <img src="https://render.githubusercontent.com/render/math?math=\w_{new}">, than if it were to start learning from scratch.
 
 Intuitively, we can interpret the generalized policy in this case as leveraging the agent's knowledge and skills developed from playing the singles and doubles format (e.g. which shots result in the birdie landing in certain regions of the court) to determine what  are the best actions to take under the new game rules.
 
 ### Generalized Policy - Grid World Environment
-Applying the generalized policy is identical in the grid world environment specified in the paper. If the agent's been trained on a set of tasks to produce a set of successor feature functions, then the generalized policy for a new task <img src="https://render.githubusercontent.com/render/math?math=\w">, given the set of policies <img src="https://render.githubusercontent.com/render/math?math=\Pi"> derived from the learned successor feature functions, is defined as:
+We can apply the generalized policy in exactly the same way for the grid world environment specified in the paper. If the agent's been trained on a set of tasks to produce a set of successor feature functions, then the generalized policy for a new task <img src="https://render.githubusercontent.com/render/math?math=\w">, given the set of policies <img src="https://render.githubusercontent.com/render/math?math=\Pi"> derived from the learned successor feature functions, is defined as:
 
 <img src="https://render.githubusercontent.com/render/math?math=\pi_\w(s)=\argmax_{a \in \mathscr{A}} \max_{\pi \in \Pi} q^\pi(s,a) = \argmax_{a \in \mathscr{A}} \max_{\pi \in \Pi} \psi^\pi(s,a)^\top\w">
 
 
 ## Algorithms and Experiments
-The paper outlines a series of experiments to test the fast reinforcement learning framework. 
+The paper outlines a series of algorithms and experiments to test the fast reinforcement learning framework. This section lists the algorithms in detail.
 
 ### Q-Learning
 Given a new task, we train the agent to learn an action-value function using Q-learning. The performance of the agent over time using this method of learning will be used as a benchmark to compare against the fast reinforcement learning framework methods.
