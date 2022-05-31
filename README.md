@@ -405,5 +405,3 @@ For this project, I'm using Python 3.7.11.
 * [DeepMind fast reinforcement learning webpage](https://deepmind.com/blog/article/fast-reinforcement-learning-through-the-composition-of-behaviours)
 * [A Youtube video of Doina Precup (one of the authors) explaining the paper](https://www.youtube.com/watch?v=6_7vE08acVM)
 * [DeepMind Github repo for this paper](https://github.com/deepmind/deepmind-research/tree/master/option_keyboard/gpe_gpi_experiments)
-
-<img src="https://render.githubusercontent.com/render/math?math=abcd">
