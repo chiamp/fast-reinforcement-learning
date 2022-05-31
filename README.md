@@ -1,6 +1,7 @@
 
 
 
+
   
 
 # Fast Reinforcement Learning
@@ -198,7 +199,7 @@ The algorithm is as follows:
 * Update the action-value function according to this update rule:
 	* <img src="https://render.githubusercontent.com/render/math?math=\delta \leftarrow r %2B \gamma q(s^',a^')-q(s,a)">
 	* <img src="https://render.githubusercontent.com/render/math?math=\theta \leftarrow \theta %2B \alpha\delta\nabla\theta q(s,a)">
-	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action-value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b  q(s^',b)">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\delta"> are the parameters of the action-value function <img src="https://render.githubusercontent.com/render/math?math=q">
+	* where <img src="https://render.githubusercontent.com/render/math?math=a^'"> is the action that maximizes the action-value at state <img src="https://render.githubusercontent.com/render/math?math=s^'"> (i.e. <img src="https://render.githubusercontent.com/render/math?math=a^' \leftarrow \argmax_b  q(s^',b)">), <img src="https://render.githubusercontent.com/render/math?math=\gamma"> is the discount factor, <img src="https://render.githubusercontent.com/render/math?math=\alpha"> is the learning rate and <img src="https://render.githubusercontent.com/render/math?math=\theta"> are the parameters of the action-value function <img src="https://render.githubusercontent.com/render/math?math=q">
 
 * Periodically measure the agent's performance by averaging over 100 episodes the total reward it receives when greedily following its policy derived from the current learned action-value function <img src="https://render.githubusercontent.com/render/math?math=q">
 
@@ -404,3 +405,5 @@ For this project, I'm using Python 3.7.11.
 * [DeepMind fast reinforcement learning webpage](https://deepmind.com/blog/article/fast-reinforcement-learning-through-the-composition-of-behaviours)
 * [A Youtube video of Doina Precup (one of the authors) explaining the paper](https://www.youtube.com/watch?v=6_7vE08acVM)
 * [DeepMind Github repo for this paper](https://github.com/deepmind/deepmind-research/tree/master/option_keyboard/gpe_gpi_experiments)
+
+<img src="https://render.githubusercontent.com/render/math?math=abcd">
